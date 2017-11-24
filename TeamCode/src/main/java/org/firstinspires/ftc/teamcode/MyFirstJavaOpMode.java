@@ -59,7 +59,6 @@ public class MyFirstJavaOpMode extends LinearOpMode {
 
         telemetry.addData("Status", "ready to start");
         telemetry.update();
-
         leftServo.setPosition(1);
         rightServo.setPosition(0);
 
@@ -94,7 +93,7 @@ public class MyFirstJavaOpMode extends LinearOpMode {
             leftMotor.setPower(leftPower);
             rightMotor.setPower(-rightPower);
             armMotor1.setPower(-armPower);
-            armMotor1.setPower(-armPower);
+            armMotor2.setPower(-armPower);
             leftServo.setPosition(leftServoPosition);
             rightServo.setPosition(rightServoPosition);
 

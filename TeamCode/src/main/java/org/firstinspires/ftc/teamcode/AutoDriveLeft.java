@@ -51,11 +51,9 @@ public class AutoDriveLeft extends LinearOpMode {
         armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        // Reset encoders
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         leftServo.setPosition(1);
         rightServo.setPosition(0);
@@ -66,11 +64,16 @@ public class AutoDriveLeft extends LinearOpMode {
 
         leftMotor.setTargetPosition(4013);
         rightMotor.setTargetPosition(4013);
-        leftMotor.setPower(.6);
+
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftMotor.setPower(.8);
         rightMotor.setPower(.8);
 
         while (opModeIsActive() &&
                 (leftMotor.isBusy() && rightMotor.isBusy())) {
+
             telemetry.addData("Path1", "leftMotor: %d", leftMotor.getCurrentPosition());
             telemetry.addData("Path2", "rightMotor: %d", rightMotor.getCurrentPosition());
             telemetry.update();
