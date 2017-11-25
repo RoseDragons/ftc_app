@@ -10,76 +10,15 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by Rose Dragons on 9/24/2017.
  */
-@Autonomous(name="Pushbot: Auto Drive Left", group="Pushbot")
-public class AutoDriveLeft extends LinearOpMode {
-    //private Gyroscope imu;
-    private DcMotor leftMotor;
-    private DcMotor rightMotor;
-    private DcMotor armMotor1;
-    private DcMotor armMotor2;
-    private Servo leftServo;
-    private Servo rightServo;
-    private ElapsedTime runtime = new ElapsedTime();
-
-    //private DigitalChannel digitalTouch;
-    //private DistanceSensor sensorColorRange;
+@Autonomous(name="Auto Drive Left", group="Pushbot")
+public class AutoDriveLeft extends AutoDrive {
+    @Override
+    public DcMotor getTurningSideMotor() {
+        return super.leftMotor;
+    }
 
     @Override
-    public void runOpMode() {
-        // Setup a variable for each drive wheel to save power level for telemetry
-        double leftPower;
-        double rightPower;
-        double armPower;
-        double rightServoPosition = 0.0;
-        double leftServoPosition = 0.0;
-
-        //imu = hardwareMap.get(Gyroscope.class, "imu");
-        leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
-        rightMotor = hardwareMap.get(DcMotor.class, "rightMotor");
-        armMotor1 = hardwareMap.get(DcMotor.class, "armMotor1");
-        armMotor2 = hardwareMap.get(DcMotor.class, "armMotor2");
-        //digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        //sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
-        leftServo = hardwareMap.get(Servo.class, "leftServo");
-        rightServo = hardwareMap.get(Servo.class, "rightServo");
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Reset encoders
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftServo.setPosition(1);
-        rightServo.setPosition(0);
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
-
-        leftMotor.setTargetPosition(4013);
-        rightMotor.setTargetPosition(4013);
-
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftMotor.setPower(.8);
-        rightMotor.setPower(.8);
-
-        while (opModeIsActive() &&
-                (leftMotor.isBusy() && rightMotor.isBusy())) {
-
-            telemetry.addData("Path1", "leftMotor: %d", leftMotor.getCurrentPosition());
-            telemetry.addData("Path2", "rightMotor: %d", rightMotor.getCurrentPosition());
-            telemetry.update();
-        }
-
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
+    public DcMotor getOppositeSideMotor() {
+        return super.rightMotor;
     }
 }
