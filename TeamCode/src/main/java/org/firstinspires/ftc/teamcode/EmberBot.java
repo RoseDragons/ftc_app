@@ -63,11 +63,48 @@ public abstract class EmberBot extends LinearOpMode {
 
         telemetry.addData("Status", "ready to start");
         telemetry.update();
-        leftServo.setPosition(1);
-        rightServo.setPosition(0);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
     }
+
+    protected void moveArmTicks(int ticks) {
+        moveArmTicks(ticks, 0.5);
+    }
+
+    protected void moveArmTicks(int ticks, double armPower) {
+        // Reset encoders
+        armMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor2.setTargetPosition(ticks);
+        armMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (ticks < 0) {
+            armPower = -armPower;
+        }
+        armMotor2.setPower(armPower);
+        armMotor1.setPower(armPower);
+
+        while (opModeIsActive() && isMotorBusy(armMotor2)) {
+            telemetry.addData("armMotor2", "%d", armMotor2.getCurrentPosition());
+            telemetry.update();
+        }
+
+        armMotor1.setPower(0.0);
+        armMotor2.setPower(0.0);
+    }
+
+    protected boolean isMotorBusy(DcMotor dcMotor) {
+        int targetPosition = dcMotor.getTargetPosition();
+        int currentPosition = dcMotor.getCurrentPosition();
+
+        if (targetPosition > 0 && currentPosition > targetPosition) {
+            return false;
+        }
+        if (targetPosition < 0 && currentPosition < targetPosition) {
+            return false;
+        }
+        return true;
+    }
+
 }

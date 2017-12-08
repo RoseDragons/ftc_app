@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
@@ -7,34 +8,33 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 public abstract class AutoDrive extends EmberBot {
 
-    @Override
-    public void runOpMode() {
-        super.runOpMode();
-
+    protected void runToPositions(int turningSidePosition, int oppositeSidePosition) {
         // Reset encoders
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        getTurningSideMotor().setTargetPosition(6500);
-        getOppositeSideMotor().setTargetPosition(8000);
+        getTurningSideMotor().setTargetPosition(turningSidePosition);
+        getOppositeSideMotor().setTargetPosition(oppositeSidePosition);
 
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        getTurningSideMotor().setPower(0.8);
-        getOppositeSideMotor().setPower(0.8);
-
-        while (opModeIsActive() &&
-                (leftMotor.isBusy() && rightMotor.isBusy())) {
-
-            telemetry.addData("Path1", "leftMotor: %d", leftMotor.getCurrentPosition());
-            telemetry.addData("Path2", "rightMotor: %d", rightMotor.getCurrentPosition());
-            telemetry.update();
+        double turningSidePower = 0.35;
+        if (turningSidePosition < 0) {
+            turningSidePower = -turningSidePower;
         }
+        getTurningSideMotor().setPower(turningSidePower);
 
-        while (opModeIsActive()) {
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+        double oppositeSidePower = 0.35;
+        if (oppositeSidePosition < 0) {
+            oppositeSidePower = -oppositeSidePower;
+        }
+        getOppositeSideMotor().setPower(oppositeSidePower);
+
+        while (opModeIsActive() && (isMotorBusy(leftMotor) || isMotorBusy(rightMotor))) {
+            telemetry.addData("leftMotor", "%d, target: %d, power: %.2f", leftMotor.getCurrentPosition(), leftMotor.getTargetPosition(), leftMotor.getPower());
+            telemetry.addData("rightMotor", "%d, target: %d, power: %.2f", rightMotor.getCurrentPosition(), rightMotor.getTargetPosition(), rightMotor.getPower());
+            telemetry.update();
         }
     }
 
