@@ -1,13 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 /**
- * Created by Rose Dragons on 9/24/2017.
+ * Created by Rose Dragons on 12/9/2017.
  */
-@Autonomous(name="Back Auto Drive Left", group="Pushbot")
-public class BackAutoDriveLeft extends AutoDrive {
+abstract public class BackAutoDrive extends AutoDrive {
     @Override
     public void runOpMode() {
         super.runOpMode();
@@ -21,8 +17,8 @@ public class BackAutoDriveLeft extends AutoDrive {
         telemetry.addLine("straight done");
         telemetry.update();
 
-        runToPositions(-500, 750);
-        runToPositions(500, 500);
+        runToPositions(-900, 1000);
+        runToPositions(300, 300);
         runToPositions(-200, -200);
         telemetry.addLine("all done");
         telemetry.update();
@@ -31,15 +27,5 @@ public class BackAutoDriveLeft extends AutoDrive {
             leftMotor.setPower(0);
             rightMotor.setPower(0);
         }
-    }
-
-    @Override
-    public DcMotor getTurningSideMotor() {
-        return super.leftMotor;
-    }
-
-    @Override
-    public DcMotor getOppositeSideMotor() {
-        return super.rightMotor;
     }
 }

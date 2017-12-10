@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -12,16 +15,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public abstract class EmberBot extends LinearOpMode {
     //protected Gyroscope imu;
+    protected DigitalChannel digitalTouch;
+    protected ColorSensor colorSensor;
+    protected DistanceSensor distanceSensor;
     protected DcMotor leftMotor;
     protected DcMotor rightMotor;
     protected DcMotor armMotor1;
     protected DcMotor armMotor2;
     protected Servo leftServo;
     protected Servo rightServo;
+    protected Servo colorSensorServo;
     protected ElapsedTime runtime = new ElapsedTime();
 
-    //protected DigitalChannel digitalTouch;
-    //protected DistanceSensor sensorColorRange;
 
     // Setup a variable for each drive wheel to save power level for telemetry
     protected double leftPower;
@@ -37,6 +42,10 @@ public abstract class EmberBot extends LinearOpMode {
         telemetry.update();
 
         //imu = hardwareMap.get(Gyroscope.class, "imu");
+        digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensorColorRange");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
+
         leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
 
         rightMotor = hardwareMap.get(DcMotor.class, "rightMotor");
@@ -48,13 +57,15 @@ public abstract class EmberBot extends LinearOpMode {
         armMotor2 = hardwareMap.get(DcMotor.class, "armMotor2");
         armMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        //sensorColorRange = hardwareMap.get(DistanceSensor.class, "sensorColorRange");
         leftServo = hardwareMap.get(Servo.class, "leftServo");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
+        colorSensorServo = hardwareMap.get(Servo.class, "colorSensorServo");
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
+        // set the digital channel to input.
+        digitalTouch.setMode(DigitalChannel.Mode.INPUT);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
