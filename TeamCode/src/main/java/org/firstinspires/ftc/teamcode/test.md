@@ -17,7 +17,7 @@
             telemetry.update();
         }
         leftMotor.setPower(0);
-        rightMotor.setPower(5);
+        rightMotor.setPower(10);
 
 
 
