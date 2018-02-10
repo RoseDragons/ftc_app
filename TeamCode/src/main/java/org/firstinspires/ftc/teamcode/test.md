@@ -9,7 +9,8 @@
 
         leftMotor.setPower(Math.abs(.1));
         rightMotor.setPower(Math.abs(.1));
-
+        //Setting x to value to 54 to practice pushing code to git
+        x=54;
         while (opModeIsActive() &&
                 (leftMotor.isBusy() && rightMotor.isBusy())) {
             telemetry.addData("Path1", "leftMotor: %d", leftMotor.getCurrentPosition());
