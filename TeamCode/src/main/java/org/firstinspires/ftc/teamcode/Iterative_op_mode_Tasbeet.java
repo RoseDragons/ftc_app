@@ -66,13 +66,6 @@ public class Iterative_op_mode_Tasbeet extends OpMode
 
         leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        waitForStart();
-        runtime.reset();
-
-        telemetry.addData("Status", "Initialized");
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
     }
 
     private void waitForStart() {
@@ -91,6 +84,11 @@ public class Iterative_op_mode_Tasbeet extends OpMode
     @Override
     public void start() {
         runtime.reset();
+
+        telemetry.addData("Status", "Initialized");
+        // Initialize the hardware variables. Note that the strings used here as parameters
+        // to 'get' must correspond to the names assigned during the robot configuration
+        // step (using the FTC Robot Controller app on the phone).
     }
 
     /*
@@ -108,10 +106,12 @@ public class Iterative_op_mode_Tasbeet extends OpMode
         //leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
         //rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        leftPower  = -gamepad1.left_stick_y ;
-        rightPower = -gamepad1.right_stick_y ;
+        //The robot goes forward, backward, left and right on using only one stick.
+        double drive = -gamepad1.right_stick_y;
+        double turn = gamepad1.right_stick_x ;
+
+        leftPower = Range.clip(drive + turn, -1, 1);
+        rightPower = Range.clip(drive - turn, -1, 1);
 
         leftMotor.setPower(leftPower);
         rightMotor.setPower(rightPower);
@@ -136,6 +136,8 @@ public class Iterative_op_mode_Tasbeet extends OpMode
      */
     @Override
     public void stop() {
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
     }
 
 }
