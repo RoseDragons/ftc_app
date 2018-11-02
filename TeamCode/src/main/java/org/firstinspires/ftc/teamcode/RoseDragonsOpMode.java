@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
@@ -12,6 +13,7 @@ import java.util.Locale;
  * Created by Rose Dragons on 9/24/2017.
  */
 @TeleOp(name="Rose Dragons OpMode", group="Linear Opmode")
+//@Disabled
 public class RoseDragonsOpMode extends EmberBot {
 
     private double driveNormalFactor = 0.85;
