@@ -32,8 +32,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="Ember2Crater", group="Opmode")
-public class Ember2Crater extends Ember2Auto {
+public class Ember2Auto extends Ember2Bot {
+    /*
+     * Code to run ONCE when the driver hits INIT
+     */
+    @Override
+    public void emberInit() {
+        super.emberInit();
+        initAcc();
+    }
 
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -42,18 +49,23 @@ public class Ember2Crater extends Ember2Auto {
     public void emberStart() {
         super.emberStart();
 
-        // Little forward
-        mecanumDriveForMilliSec(0, 0, 0, -0.65, 300);
-        // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,650);
-        // Move back
-        mecanumDriveForMilliSec(0, 0, 0, .95,1500);
-        // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,900);
-        // Move back
-        mecanumDriveForMilliSec(0, 0, 0, 1.0,1000);
+        moveAccTicks(ACC_MOTOR_MAX_TICKS - 800, 1.0);
+    }
 
-        // Stop
-        mecanumDriveForMilliSec(0, 0, 0, 0, 50);
+    protected void mecanumDriveForMilliSec(double left_x, double left_y,
+                                           double right_x, double right_y, int ms) {
+
+        long startTime = System.currentTimeMillis();
+        while(opModeIsActive() && (System.currentTimeMillis() - startTime <= ms)) {
+            mecanumDrive(left_x, left_y, right_x, right_y);
+
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("gamepad", "1: left.x (%.2f), left.y (%.2f), right.x (%.2f), right.y (%.2f)",
+                    left_x, left_y, right_x, right_x);
+            telemetry.addData("Motors", "m0 (%.2f), m1 (%.2f), m2 (%.2f), m3 (%.2f)", v0, v1, v2, v2);
+            telemetry.addData("Acc", "pos: %d", AccMotor.getCurrentPosition());
+            telemetry.update();
+        }
     }
 }

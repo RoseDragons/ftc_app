@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 public abstract class Ember2Bot extends LinearOpMode {
     protected static final double CONTINUOUS_SERVO_STOP = 0.5;
@@ -173,5 +174,21 @@ public abstract class Ember2Bot extends LinearOpMode {
 
             return true;
         }
+    }
+
+    protected void mecanumDrive(double left_x, double left_y, double right_x, double right_y) {
+        //Setting power to motors using trigonometric algorithm for mecanum wheels
+        double r = Math.hypot(right_x, right_y);
+        double robotAngle = Math.atan2(right_x, right_y) - (Math.PI / 4);
+        double rightX = left_x;
+        v0 = r * Math.cos(robotAngle) + rightX;
+        v1 = r * Math.sin(robotAngle) + rightX;
+        v2 = r * Math.sin(robotAngle) - rightX;
+        v3 = r * Math.cos(robotAngle) - rightX;
+
+        Motor_0.setPower(Range.clip(v0, -1, 1));
+        Motor_1.setPower(Range.clip(v1, -1, 1));
+        Motor_2.setPower(Range.clip(v2, -1, 1));
+        Motor_3.setPower(Range.clip(v3, -1, 1));
     }
 }

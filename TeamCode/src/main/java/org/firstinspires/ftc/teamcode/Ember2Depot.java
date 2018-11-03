@@ -32,8 +32,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name="Ember2Crater", group="Opmode")
-public class Ember2Crater extends Ember2Auto {
+@Autonomous(name="Ember2Depot", group="Opmode")
+public class Ember2Depot extends Ember2Auto {
 
     /*
      * Code to run ONCE when the driver hits PLAY
@@ -45,13 +45,13 @@ public class Ember2Crater extends Ember2Auto {
         // Little forward
         mecanumDriveForMilliSec(0, 0, 0, -0.65, 300);
         // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,650);
+        mecanumDriveForMilliSec(0, 0, -0.9, 0,640);
         // Move back
-        mecanumDriveForMilliSec(0, 0, 0, .95,1500);
-        // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,900);
+        mecanumDriveForMilliSec(0, 0, 0, .95,1600);
+        // Turn right
+        mecanumDriveForMilliSec(0, 0, 0.9, 0,840);
         // Move back
-        mecanumDriveForMilliSec(0, 0, 0, 1.0,1000);
+        mecanumDriveForMilliSec(0, 0, 0, 1.0,1400);
 
         // Stop
         mecanumDriveForMilliSec(0, 0, 0, 0, 50);

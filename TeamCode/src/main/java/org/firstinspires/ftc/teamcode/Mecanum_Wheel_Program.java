@@ -54,19 +54,7 @@ public class Mecanum_Wheel_Program extends Ember2Bot
         //servo_3.setPower(boxServoSpeed);
         //servo_5.setPower(boxServoSpeed);
 
-        //Setting power to motors using trigonometric algorithm for mecanum wheels
-        double r = Math.hypot(gamepad1.right_stick_x, gamepad1.right_stick_y);
-        double robotAngle = Math.atan2(gamepad1.right_stick_x, gamepad1.right_stick_y) - (Math.PI / 4);
-        double rightX = gamepad1.left_stick_x;
-        v0 = r * Math.cos(robotAngle) + rightX;
-        v1 = r * Math.sin(robotAngle) + rightX;
-        v2 = r * Math.sin(robotAngle) - rightX;
-        v3 = r * Math.cos(robotAngle) - rightX;
-
-        Motor_0.setPower(Range.clip(v0, -1, 1));
-        Motor_1.setPower(Range.clip(v1, -1, 1));
-        Motor_2.setPower(Range.clip(v2, -1, 1));
-        Motor_3.setPower(Range.clip(v3, -1, 1));
+        mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -78,5 +66,7 @@ public class Mecanum_Wheel_Program extends Ember2Bot
         telemetry.addData("Acc", "pos: %d", AccMotor.getCurrentPosition());
         telemetry.update();
     }
+
+
 
 }
