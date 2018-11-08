@@ -36,11 +36,11 @@ public class Ember2Auto extends Ember2Bot {
     /*
      * Code to run ONCE when the driver hits INIT
      */
-    @Override
-    public void emberInit() {
-        super.emberInit();
-        initAcc();
-    }
+    //@Override
+    //public void emberInit() {
+       // super.emberInit();
+        //initAcc();
+    //}
 
     /*
      * Code to run ONCE when the driver hits PLAY

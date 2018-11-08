@@ -47,9 +47,9 @@ public class Ember2Depot extends Ember2Auto {
         // Turn left
         mecanumDriveForMilliSec(0, 0, -0.9, 0,640);
         // Move back
-        mecanumDriveForMilliSec(0, 0, 0, .95,1600);
+        mecanumDriveForMilliSec(0, 0, 0, .95,1200);
         // Turn right
-        mecanumDriveForMilliSec(0, 0, 0.9, 0,840);
+        mecanumDriveForMilliSec(0, 0, 0.9, 0,1000);
         // Move back
         mecanumDriveForMilliSec(0, 0, 0, 1.0,1400);
 
