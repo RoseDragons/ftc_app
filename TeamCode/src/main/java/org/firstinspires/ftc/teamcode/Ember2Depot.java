@@ -42,6 +42,7 @@ public class Ember2Depot extends Ember2Auto {
     public void emberStart() {
         super.emberStart();
 
+        /*
         // Little forward
         mecanumDriveForMilliSec(0, 0, 0, -0.65, 300);
         // Turn left
@@ -52,6 +53,7 @@ public class Ember2Depot extends Ember2Auto {
         mecanumDriveForMilliSec(0, 0, 0.9, 0,1000);
         // Move back
         mecanumDriveForMilliSec(0, 0, 0, 1.0,1400);
+        */
 
         // Stop
         mecanumDriveForMilliSec(0, 0, 0, 0, 50);
