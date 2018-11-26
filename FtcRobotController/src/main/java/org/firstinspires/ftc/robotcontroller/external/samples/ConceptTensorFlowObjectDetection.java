@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -68,7 +68,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "AbWUeZr/////AAAAGeFdMmFhE054nlTo+3C3a7ovQcRzjVKW4ojh1WA1rArshva3w9sIz6YZIjVwM293mlFK+UhFMhhsGiqjBoTSPnJmZRGs8xYa7ZhJT53WYyrXHh6PJP58bzUFFG+4Jl9dYKSYFv7ly9vI7eonJYrB59eIUpv4tgZl917fuYBzYMqEZ8NW2402r/RRmISh/lK23+6ogoCPE344qBoUt+sbgCgfMy3BNTjWWkJv0Z2gZGcs6t3/Od1jpaIbL0gHWbhdnL/VcOkcLUnVIsE0lbTjxerbAr6eYMfjQU8MEXZ01afj1IY7dtAk6fSl1rK6kFUcL9CZu6zX6HxQ6in9TURFEjzqjM1DLvaG/VuYfKTE8m3+";;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -124,6 +124,8 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                           } else {
                             silverMineral2X = (int) recognition.getLeft();
                           }
+                          telemetry.addData("height", updatedRecognitions.get(0).getHeight());
+                          telemetry.addData("getImageHeight", updatedRecognitions.get(0).getImageHeight());
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                           if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {

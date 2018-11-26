@@ -42,19 +42,6 @@ public class Ember2Crater extends Ember2Auto {
     public void emberStart() {
         super.emberStart();
 
-        /*
-        // Little forward
-        mecanumDriveForMilliSec(0, 0, 0, -0.65, 300);
-        // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,650);
-        // Move back
-        mecanumDriveForMilliSec(0, 0, 0, .95,1500);
-        // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,900);
-        // Move back
-        mecanumDriveForMilliSec(0, 0, 0, 1.0,1000);
-        */
-
         // Stop
         mecanumDriveForMilliSec(0, 0, 0, 0, 50);
     }

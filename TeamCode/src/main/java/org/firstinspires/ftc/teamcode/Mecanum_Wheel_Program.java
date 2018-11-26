@@ -38,11 +38,14 @@ public class Mecanum_Wheel_Program extends Ember2Bot
 {
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
+     * Called from parent class: Ember2Bot
      */
     @Override
     public void emberLoop() {
+        //Note: super is calling rom parent class
         super.emberLoop();
 
+        //Moving acctuator with gamepad
         double AccPower = -gamepad2.right_stick_y;
         if (inAccRange(ACC_MOTOR_MAX_TICKS, (AccPower > 0))) {
             AccMotor.setPower(AccPower);
@@ -50,13 +53,15 @@ public class Mecanum_Wheel_Program extends Ember2Bot
             AccMotor.setPower(0);
         }
 
+
         double boxServoSpeed = gamepad2.left_stick_y;
         //servo_3.setPower(boxServoSpeed);
         //servo_5.setPower(boxServoSpeed);
 
+        //Taking values from the gamepad
         mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
-        // Show the elapsed game time and wheel power.
+        // Show the elapsed game time and wheel power & updating telemetry
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("gamepad", "1: left.x (%.2f), left.y (%.2f), right.x (%.2f), right.y (%.2f)",
                 gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
