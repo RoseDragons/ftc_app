@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -49,6 +50,7 @@ public abstract class Ember2Bot extends LinearOpMode {
 
     //CRServo servo_5;
     //CRServo servo_3;
+    Servo DragonDrop;
 
     //Velocity for each wheel
     double v0;
@@ -111,6 +113,7 @@ public abstract class Ember2Bot extends LinearOpMode {
 
         //servo_3 = hardwareMap.get(CRServo.class, "Servo_3");
         //servo_5 = hardwareMap.get(CRServo.class, "Servo_5");
+        DragonDrop = hardwareMap.get(Servo.class, "DragonDrop");
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -179,7 +182,7 @@ public abstract class Ember2Bot extends LinearOpMode {
         AccMotor.setPower(-1);
 
         //Keeps motor running until button is pressed
-        while (AccTouch.getState() == true) {
+        while (AccTouch.getState() == true && opModeIsActive()) {
             telemetry.addData("accMotor", "pos: %d", AccMotor.getCurrentPosition());
             telemetry.update();
         }
@@ -291,10 +294,51 @@ public abstract class Ember2Bot extends LinearOpMode {
         Motor_3.setPower(Range.clip(v3, -1, 1));
     }
 
+    protected void turnDegrees (double power, float degrees) {
+        Orientation orientation  = imu.getAngularOrientation();
+        float startHeading = orientation.firstAngle;
+
+        float targetHeading = startHeading + degrees;
+        if (degrees > 0) {
+            power = -power;
+        }
+
+        targetHeading = AngleUnit.normalizeDegrees(targetHeading);
+        float currentHeading = startHeading;
+
+        while(opModeIsActive() &&
+                ((degrees > 0 && currentHeading < targetHeading) ||
+                 (degrees < 0 && currentHeading > targetHeading))) {
+
+            if (opModeIsActive() == false) {
+                break;
+            }
+
+            mecanumDrive(0, 0, power, 0);
+
+            telemetry.clearAll();
+            telemetry.addData("Start Heading", "%.2f", startHeading);
+            telemetry.addData("Target Heading", "%.2f", targetHeading);
+            telemetry.addData("Current Heading", "%.2f", currentHeading);
+            telemetry.update();
+
+            currentHeading = imu.getAngularOrientation().firstAngle;
+        }
+        stopAllDrive();
+    }
+
+    public void pause(long ms) {
+        try {
+            stopAllDrive();
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
     // IMU Telemetry Configuration (From FTC Example)
     //----------------------------------------------------------------------------------------------
-
     void composeIMUTelemetry() {
 
         // At the beginning of each telemetry update, grab a bunch of data

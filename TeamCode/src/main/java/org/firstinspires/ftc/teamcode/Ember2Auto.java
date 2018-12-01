@@ -92,6 +92,8 @@ public class Ember2Auto extends Ember2Bot {
      */
     private TFObjectDetector tfod;
 
+    protected int goldPosition = -1;
+
     /**
      * Called from Parent class
      * Code to run ONCE when the driver hits INIT
@@ -100,8 +102,8 @@ public class Ember2Auto extends Ember2Bot {
     public void emberInit() {
         super.emberInit();
 
-        // Initialize acctuator to find zero
-        initAcc();
+        // Initialize acctuator to find zero ???
+        // initAcc();
 
         //Initializing Vuforia
         initVuforia();
@@ -160,12 +162,12 @@ public class Ember2Auto extends Ember2Bot {
      */
     protected void mecanumDriveForMilliSec(double left_x, double left_y,
                                            double right_x, double right_y, int ms) {
-
         long startTime = System.currentTimeMillis();
         // Keep robot running for ms (milli seconds) amount.
         while((System.currentTimeMillis() - startTime <= ms)) {
             if (opModeIsActive() == false) {
                 stopAllDrive();
+                break;
             }
 
             mecanumDrive(left_x, left_y, right_x, right_y);
@@ -174,6 +176,7 @@ public class Ember2Auto extends Ember2Bot {
             telemetry.addData("gamepad", "1: left.x (%.2f), left.y (%.2f), right.x (%.2f), right.y (%.2f)",
                     left_x, left_y, right_x, right_x);
             telemetry.addData("Motors", "m0 (%.2f), m1 (%.2f), m2 (%.2f), m3 (%.2f)", v0, v1, v2, v2);
+            telemetry.update();
         }
     }
 
@@ -181,45 +184,71 @@ public class Ember2Auto extends Ember2Bot {
      *
      */
     private void unlatch() {
-        // Lower the robot
-        // moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
+        // Lower the robot ????
+        //moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
 
         // Unlatch
         // Little forward
         mecanumDriveForMilliSec(0, 0, 0, -0.65, 300);
         // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,640);
+        mecanumDriveForMilliSec(0, 0, -0.9, 0,500);
         // Strafe right
         mecanumDriveForMilliSec(-.80, 0, 0, 0,600);
         // Little back
-        mecanumDriveForMilliSec(0, 0, 0, 0.7,500);
+        mecanumDriveForMilliSec(0, 0, 0, 0.7,200);
+        // Turn left
+        mecanumDriveForMilliSec(0, 0, -0.9, 0,250);
+
+        pause(150);
     }
 
     /**
-     * 
+     *
      */
     private void moveGoldMineral() {
         while (opModeIsActive()) {
+            telemetry.clear();
             if (isGoldMineral()) {
 
                 // Stop
                 mecanumDriveForMilliSec(0, 0, 0, 0, 50);
 
-                // Move Gold by turning 90 degrees
-                mecanumDriveForMilliSec(0, 0, 0.7, 0.0, 1800);
+                goldPosition = whichGoldMineral();
+
+                // Move Gold by turning ~90 degrees right ...
+                if( goldPosition == 1) {
+                    turnDegrees(0.7, -95);
+                } else if (goldPosition == 2){
+                    turnDegrees(0.7, -85);
+                } else {
+                    turnDegrees(0.7, -85);
+                    mecanumDriveForMilliSec(0, 0, 0, -0.7, 700);
+                }
 
                 //... Then move forward.
-                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1900);
+                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1500);
 
                 telemetry.update();
                 return;
             }
 
             // Keep turning right
-            mecanumDriveForMilliSec(0, 0, 0.45, 0,25);
-
+            mecanumDriveForMilliSec(0, 0, 0.50, 0,25);
             telemetry.update();
         }
+    }
+
+    private int whichGoldMineral() {
+        Orientation orientation  = imu.getAngularOrientation();
+        float startHeading = orientation.firstAngle;
+        if(startHeading > 15.0) {
+            return 1;
+        }
+        if(startHeading > -20) {
+            return 2;
+        }
+
+        return 3;
     }
 
     private void detectPic() {

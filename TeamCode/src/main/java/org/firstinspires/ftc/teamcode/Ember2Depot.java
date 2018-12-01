@@ -42,6 +42,30 @@ public class Ember2Depot extends Ember2Auto {
     public void emberStart() {
         super.emberStart();
 
+        //Turn towards depot
+        switch (goldPosition) {
+            case 1:
+                // Turn right
+                turnDegrees(0.8, -65);
+                // Go forward
+                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1900);
+                break;
+            case 2:
+                // Go forward
+                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1400);
+                break;
+            case 3:
+                // Turn right
+                turnDegrees(0.8, 50);
+                // Go forward
+                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1800);
+                break;
+        }
+
+
+        //Drop the Marker
+        DragonDrop.setPosition(0.75);
+
         // Stop
         mecanumDriveForMilliSec(0, 0, 0, 0, 50);
     }
