@@ -46,7 +46,7 @@ public class Ember2Depot extends Ember2Auto {
         switch (goldPosition) {
             case 1:
                 // Turn right
-                turnDegrees(0.8, -65);
+                turnDegrees(0.8, -80);
                 // Go forward
                 mecanumDriveForMilliSec(0, 0, 0, -0.7, 1900);
                 break;

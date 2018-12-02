@@ -103,7 +103,7 @@ public class Ember2Auto extends Ember2Bot {
         super.emberInit();
 
         // Initialize acctuator to find zero ???
-        // initAcc();
+        //initAcc();
 
         //Initializing Vuforia
         initVuforia();
@@ -184,7 +184,7 @@ public class Ember2Auto extends Ember2Bot {
      *
      */
     private void unlatch() {
-        // Lower the robot ????
+        // Lower the robot  ????
         //moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
 
         // Unlatch
@@ -217,16 +217,16 @@ public class Ember2Auto extends Ember2Bot {
 
                 // Move Gold by turning ~90 degrees right ...
                 if( goldPosition == 1) {
-                    turnDegrees(0.7, -95);
+                    turnToAngle(0.7, -55);
                 } else if (goldPosition == 2){
-                    turnDegrees(0.7, -85);
+                    turnToAngle(0.7, -85);
                 } else {
-                    turnDegrees(0.7, -85);
-                    mecanumDriveForMilliSec(0, 0, 0, -0.7, 700);
+                    turnToAngle(0.7, -116);
+                    mecanumDriveForMilliSec(0, 0, 0, -0.7, 300);
                 }
 
                 //... Then move forward.
-                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1500);
+                mecanumDriveForMilliSec(0, 0, 0, -0.6, 2400);
 
                 telemetry.update();
                 return;
