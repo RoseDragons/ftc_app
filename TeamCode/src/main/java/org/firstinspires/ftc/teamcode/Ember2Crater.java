@@ -46,15 +46,15 @@ public class Ember2Crater extends Ember2Auto {
 
         switch (goldPosition) {
             case 1:
-                turnToAngle(0.7, -15);
+                turnToAngle(0.7, -5);
                 mecanumDriveForMilliSec(0, 0, 0, -0.8, 1550);
                 break;
             case 2:
-                turnToAngle(0.7, -20);
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1700);
+                turnToAngle(0.7, -25);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1500);
                 break;
             case 3:
-                turnToAngle(0.7, -20);
+                turnToAngle(0.7, -17);
                 mecanumDriveForMilliSec(0, 0, 0, -0.8, 1700);
                 break;
         }

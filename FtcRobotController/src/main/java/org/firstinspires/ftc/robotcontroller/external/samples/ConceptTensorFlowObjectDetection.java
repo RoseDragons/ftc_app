@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -119,13 +119,20 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                         for (Recognition recognition : updatedRecognitions) {
                           if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                             goldMineralX = (int) recognition.getLeft();
+                              telemetry.addData("Gold height", recognition.getWidth());
+                              telemetry.addData("Gold left", recognition.getTop());
+                              telemetry.addData("Gold getImageHeight", recognition.getImageWidth());
+                              telemetry.addData("Gold getImageWidth", recognition.getImageHeight());
                           } else if (silverMineral1X == -1) {
                             silverMineral1X = (int) recognition.getLeft();
                           } else {
                             silverMineral2X = (int) recognition.getLeft();
                           }
-                          telemetry.addData("height", updatedRecognitions.get(0).getHeight());
-                          telemetry.addData("getImageHeight", updatedRecognitions.get(0).getImageHeight());
+                          telemetry.addData("height", recognition.getHeight());
+                          telemetry.addData("left", recognition.getLeft());
+                          telemetry.addData("right", recognition.getRight());
+                          telemetry.addData("getImageHeight", recognition.getImageHeight());
+                          telemetry.addData("getImageWidth", recognition.getImageWidth());
                         }
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                           if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {

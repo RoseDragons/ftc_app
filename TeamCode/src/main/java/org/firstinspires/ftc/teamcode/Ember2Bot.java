@@ -296,10 +296,14 @@ public abstract class Ember2Bot extends LinearOpMode {
 
     protected void turnDegrees(double power, float degrees) {
         Orientation orientation  = imu.getAngularOrientation();
-        float startHeading = orientation.firstAngle;
 
-        float targetHeading = startHeading + degrees;
-        if (degrees > 0) {
+        turnToAngle(power, orientation.firstAngle + degrees);
+    }
+
+    protected void turnToAngle(double power, float targetHeading) {
+        float startHeading = imu.getAngularOrientation().firstAngle;
+        float diff = targetHeading - startHeading;
+        if (diff > 0) {
             power = -power;
         }
 
@@ -307,12 +311,8 @@ public abstract class Ember2Bot extends LinearOpMode {
         float currentHeading = startHeading;
 
         while(opModeIsActive() &&
-                ((degrees > 0 && currentHeading < targetHeading) ||
-                 (degrees < 0 && currentHeading > targetHeading))) {
-
-            if (opModeIsActive() == false) {
-                break;
-            }
+                ((diff > 0 && currentHeading < targetHeading)
+                        || (diff < 0 && currentHeading > targetHeading))) {
 
             mecanumDrive(0, 0, power, 0);
 
@@ -325,10 +325,6 @@ public abstract class Ember2Bot extends LinearOpMode {
             currentHeading = imu.getAngularOrientation().firstAngle;
         }
         stopAllDrive();
-    }
-
-    protected void turnToAngle(double power, float degrees) {
-        turnDegrees(power, (-1 * imu.getAngularOrientation().firstAngle) + degrees);
     }
 
     public void pause(long ms) {

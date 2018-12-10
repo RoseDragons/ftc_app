@@ -30,6 +30,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -61,6 +63,10 @@ public class Ember2Auto extends Ember2Bot {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+
+    private static final int LEFT = -1;
+    private static final int RIGHT = 1;
+    private static final int CENTER = 0;
 
     //Vuforia Key
     private static final String VUFORIA_KEY = "AbWUeZr/////AAAAGeFdMmFhE054nlTo+3C3a7ovQcRzjVKW4ojh1WA1rArshva3w9sIz6YZIjVwM293mlFK+UhFMhhsGiqjBoTSPnJmZRGs8xYa7ZhJT53WYyrXHh6PJP58bzUFFG+4Jl9dYKSYFv7ly9vI7eonJYrB59eIUpv4tgZl917fuYBzYMqEZ8NW2402r/RRmISh/lK23+6ogoCPE344qBoUt+sbgCgfMy3BNTjWWkJv0Z2gZGcs6t3/Od1jpaIbL0gHWbhdnL/VcOkcLUnVIsE0lbTjxerbAr6eYMfjQU8MEXZ01afj1IY7dtAk6fSl1rK6kFUcL9CZu6zX6HxQ6in9TURFEjzqjM1DLvaG/VuYfKTE8m3+";
@@ -185,143 +191,170 @@ public class Ember2Auto extends Ember2Bot {
      */
     private void unlatch() {
         // Lower the robot  ????
-        //moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
+        moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
 
         // Unlatch
         // Little forward
         mecanumDriveForMilliSec(0, 0, 0, -0.65, 300);
         // Turn left
         mecanumDriveForMilliSec(0, 0, -0.9, 0,500);
-        // Strafe right
-        mecanumDriveForMilliSec(-.80, 0, 0, 0,600);
-        // Little back
-        mecanumDriveForMilliSec(0, 0, 0, 0.7,200);
-        // Turn left
-        mecanumDriveForMilliSec(0, 0, -0.9, 0,250);
-
-        pause(150);
     }
 
     /**
      *
      */
     private void moveGoldMineral() {
+        turnToViewMinerals();
+
+        int goldPosition = findGoldMineral();
+        telemetry.update();
+
+        // Move Gold by move backwards
+        switch(goldPosition){
+            case LEFT:
+                turnToAngle(0.7, 110);
+                break;
+            case CENTER:
+                turnToAngle(0.7, 93);
+                break;
+            case RIGHT:
+                turnToAngle(0.7, 70);
+                break;
+        }
+        mecanumDriveForMilliSec(0, 0, 0, 0.65, 2000);
+
+        telemetry.update();
+        return;
+    }
+
+    // Taken from FTC sample
+    private int findGoldMineral() {
+        double startTime = runtime.milliseconds();
+
+        while (runtime.milliseconds() < startTime + (3 * 1000)) {
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() == 3) {
+                    int goldMineralX = -1;
+                    int silverMineral1X = -1;
+                    int silverMineral2X = -1;
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldMineralX = (int) recognition.getTop();
+                        } else if (silverMineral1X == -1) {
+                            silverMineral1X = (int) recognition.getTop();
+                        } else {
+                            silverMineral2X = (int) recognition.getTop();
+                        }
+                        telemetry.addData("height", updatedRecognitions.get(0).getWidth());
+                        telemetry.addData("getImageHeight", updatedRecognitions.get(0).getImageWidth());
+                    }
+                    if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                        if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                            telemetry.addData("Gold Mineral Position", "Left");
+                            return LEFT;
+                        } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                            telemetry.addData("Gold Mineral Position", "Right");
+                            return RIGHT;
+                        } else {
+                            telemetry.addData("Gold Mineral Position", "Center");
+                            return CENTER;
+                        }
+                    }
+                }
+            }
+            telemetry.update();
+        }
+
+        // Just return any value
+        return findGoldMineral2();
+    }
+
+    private int findGoldMineral2() {
+        double startTime = runtime.milliseconds();
+
+        while (runtime.milliseconds() < startTime + (5 * 1000)) {
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                for (Recognition recognition : updatedRecognitions) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        if (recognition.getTop() < 420) {
+                            telemetry.addData("Gold Mineral Position", "Left");
+                            return LEFT;
+                        }
+
+                        if (recognition.getTop() < 820) {
+                            telemetry.addData("Gold Mineral Position", "Center");
+                            return CENTER;
+                        }
+
+                        telemetry.addData("Gold Mineral Position", "Right");
+                        return RIGHT;
+                    }
+                    telemetry.addData("height", recognition.getWidth());
+                    telemetry.addData("getImageHeight", recognition.getImageWidth());
+                }
+            }
+            telemetry.update();
+        }
+
+        return LEFT;
+    }
+
+    private void turnToViewMinerals() {
+        // turn left and move forward
+        turnToAngle(0.8, 87);
+        mecanumDriveForMilliSec(0, 0, 0, -0.5, 500);
+        telemetry.update();
+
+        stopAllDrive();
+
+/*
+        int scan = 0;
         while (opModeIsActive()) {
             telemetry.clear();
-            if (isGoldMineral()) {
 
-                // Stop
-                mecanumDriveForMilliSec(0, 0, 0, 0, 50);
-
-                goldPosition = whichGoldMineral();
-
-                // Move Gold by turning ~90 degrees right ...
-                if( goldPosition == 1) {
-                    turnToAngle(0.7, -55);
-                } else if (goldPosition == 2){
-                    turnToAngle(0.7, -85);
-                } else {
-                    turnToAngle(0.7, -116);
-                    mecanumDriveForMilliSec(0, 0, 0, -0.7, 300);
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                pause(10000);
+                if (updatedRecognitions.size() == 3) {
+                    // Move until all three in view
+                    telemetry.update();
+                    break;
                 }
-
-                //... Then move forward.
-                mecanumDriveForMilliSec(0, 0, 0, -0.6, 2400);
-
-                telemetry.update();
-                return;
             }
 
-            // Keep turning right
-            mecanumDriveForMilliSec(0, 0, 0.50, 0,25);
+            turnToAngle(0.6, scan + 85);
             telemetry.update();
+
+            scan = ((scan + 5) % 30) - 15;
         }
+*/
     }
 
-    private int whichGoldMineral() {
-        Orientation orientation  = imu.getAngularOrientation();
-        float startHeading = orientation.firstAngle;
-        if(startHeading > 15.0) {
-            return 1;
-        }
-        if(startHeading > -20) {
-            return 2;
-        }
-
-        return 3;
-    }
-
-    private void detectPic() {
-        while (opModeIsActive()) {
-            if (isPictureDetected()) {
-
-                // Stop
-                mecanumDriveForMilliSec(0, 0, 0, 0, 50);
-                return;
-            }
-
-            // Keep turning right
-            mecanumDriveForMilliSec(0, 0, 0.5, 0,25);
-
-            telemetry.update();
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    private boolean isGoldMineral() {
-        // getUpdatedRecognitions() will return null if no new information is available since
-        // the last time that call was made.
-        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-        if (updatedRecognitions != null) {
-            telemetry.addData("# Object Detected", updatedRecognitions.size());
-            if (updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getHeight() > 90) {
-                if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL)) {
-                    telemetry.addData("Gold Mineral", "Found " + updatedRecognitions.get(0).getHeight());
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isPictureDetected() {
-
-        // check all the trackable target to see which one (if any) is visible.
-        targetVisible = false;
-        for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                telemetry.addData("Visible Target", trackable.getName());
-                targetVisible = true;
-
-                // getUpdatedRobotLocation() will return null if no new information is available since
-                // the last time that call was made, or if the trackable is not currently visible.
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                if (robotLocationTransform != null) {
-                    lastLocation = robotLocationTransform;
-                }
-                break;
-            }
-        }
-
-        // Provide feedback as to where the robot is located (if we know).
-        if (targetVisible) {
-            // express position (translation) of robot in inches.
-            VectorF translation = lastLocation.getTranslation();
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-            // express the rotation of the robot in degrees.
-            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+    private boolean isMineralAhead(float heading) {
+        if (heading < 40 && heading > 20) {
             return true;
         }
-        else {
-            telemetry.addData("Visible Target", "none");
+        if (heading < 10 && heading > -10) {
+            return true;
         }
-
+        if (heading < -20 && heading > -40) {
+            return true;
+        }
         return false;
     }
 
@@ -467,6 +500,7 @@ public class Ember2Auto extends Ember2Bot {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.3;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
