@@ -15,7 +15,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 import java.util.Locale;
 
@@ -25,7 +27,6 @@ public abstract class Ember2Bot extends LinearOpMode {
 
     // State used for updating telemetry for IMU sensor
     Orientation angles;
-    Acceleration gravity;
 
     //Constants for continuous servos
     protected static final double CONTINUOUS_SERVO_STOP = 0.5;
@@ -182,12 +183,14 @@ public abstract class Ember2Bot extends LinearOpMode {
         AccMotor.setPower(-1);
 
         //Keeps motor running until button is pressed
-        while (AccTouch.getState() == true && opModeIsActive()) {
+        while (!isStopRequested() && AccTouch.getState() == true) {
             telemetry.addData("accMotor", "pos: %d", AccMotor.getCurrentPosition());
             telemetry.update();
         }
 
         //Once button is hit, stop
+        telemetry.addData("accMotor", "stopped");
+        telemetry.update();
         AccMotor.setPower(0);
 
         //When button is hit, acctuator position is at 0 position
@@ -294,6 +297,37 @@ public abstract class Ember2Bot extends LinearOpMode {
         Motor_3.setPower(Range.clip(v3, -1, 1));
     }
 
+    /**
+     * NOTE: NOT WORKING - Do not use
+     * @param power
+     * @param distance_cm
+     */
+    protected void driveDistance(double power, double distance_cm) {
+        imu.startAccelerationIntegration(null, null, 250);
+
+        if (distance_cm > 0) {
+            power = -power;
+        }
+
+        mecanumDrive(0, 0, 0, power);
+
+        while(opModeIsActive()) {
+            Position position = imu.getPosition();
+            position = position.toUnit(DistanceUnit.CM);
+            if ((distance_cm > 0 && position.x > distance_cm) ||
+                    (distance_cm < 0  && position.x < distance_cm)) {
+                break;
+            }
+
+            telemetry.clearAll();
+            telemetry.addData("position", position.toString());
+            telemetry.update();
+        }
+
+        stopAllDrive();
+        imu.stopAccelerationIntegration();
+    }
+
     protected void turnDegrees(double power, float degrees) {
         Orientation orientation  = imu.getAngularOrientation();
 
@@ -348,8 +382,7 @@ public abstract class Ember2Bot extends LinearOpMode {
             // Acquiring the angles is relatively expensive; we don't want
             // to do that in each of the three items that need that info, as that's
             // three times the necessary expense.
-            angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            gravity  = imu.getGravity();
+            angles    = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         }
         });
 
@@ -388,17 +421,9 @@ public abstract class Ember2Bot extends LinearOpMode {
                 });
 
         /*telemetry.addLine()
-                .addData("grvty", new Func<String>() {
+                .addData("position", new Func<String>() {
                     @Override public String value() {
-                        return gravity.toString();
-                    }
-                })
-                .addData("mag", new Func<String>() {
-                    @Override public String value() {
-                        return String.format(Locale.getDefault(), "%.3f",
-                                Math.sqrt(gravity.xAccel*gravity.xAccel
-                                        + gravity.yAccel*gravity.yAccel
-                                        + gravity.zAccel*gravity.zAccel));
+                        return position.toString();
                     }
                 });*/
     }

@@ -42,26 +42,24 @@ public class Ember2Crater extends Ember2Auto {
     public void emberStart() {
         super.emberStart();
 
-        mecanumDriveForMilliSec(0, 0, 0, 0.8, 1000);
+        mecanumDriveForMilliSec(0, 0, 0, -0.8, 800);
+
+        turnToAngle(0.7, -8);
 
         switch (goldPosition) {
-            case 1:
-                turnToAngle(0.7, -5);
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1550);
+            case LEFT:
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1640);
                 break;
-            case 2:
-                turnToAngle(0.7, -25);
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1500);
+            case CENTER:
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1675);
                 break;
-            case 3:
-                turnToAngle(0.7, -17);
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1700);
+            case RIGHT:
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1680);
                 break;
         }
 
-        turnToAngle(0.7, 37);
-
-        mecanumDriveForMilliSec(0, 0, 0, -0.9, 2100);
+        turnToAngle(0.7, 33);
+        mecanumDriveForMilliSec(0, 0, 0, -0.9, 2000);
 
         // Stop
         mecanumDriveForMilliSec(0, 0, 0, 0, 25);

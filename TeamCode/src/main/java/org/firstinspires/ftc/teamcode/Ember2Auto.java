@@ -64,9 +64,9 @@ public class Ember2Auto extends Ember2Bot {
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
-    private static final int LEFT = -1;
-    private static final int RIGHT = 1;
-    private static final int CENTER = 0;
+    protected static final int LEFT = -1;
+    protected static final int RIGHT = 1;
+    protected static final int CENTER = 0;
 
     //Vuforia Key
     private static final String VUFORIA_KEY = "AbWUeZr/////AAAAGeFdMmFhE054nlTo+3C3a7ovQcRzjVKW4ojh1WA1rArshva3w9sIz6YZIjVwM293mlFK+UhFMhhsGiqjBoTSPnJmZRGs8xYa7ZhJT53WYyrXHh6PJP58bzUFFG+4Jl9dYKSYFv7ly9vI7eonJYrB59eIUpv4tgZl917fuYBzYMqEZ8NW2402r/RRmISh/lK23+6ogoCPE344qBoUt+sbgCgfMy3BNTjWWkJv0Z2gZGcs6t3/Od1jpaIbL0gHWbhdnL/VcOkcLUnVIsE0lbTjxerbAr6eYMfjQU8MEXZ01afj1IY7dtAk6fSl1rK6kFUcL9CZu6zX6HxQ6in9TURFEjzqjM1DLvaG/VuYfKTE8m3+";
@@ -108,9 +108,6 @@ public class Ember2Auto extends Ember2Bot {
     public void emberInit() {
         super.emberInit();
 
-        // Initialize acctuator to find zero ???
-        //initAcc();
-
         //Initializing Vuforia
         initVuforia();
 
@@ -129,6 +126,9 @@ public class Ember2Auto extends Ember2Bot {
         }
 
         telemetry.update();
+
+        // Initialize acctuator to find zero ???
+        //initAcc();
     }
 
     /*
@@ -191,7 +191,7 @@ public class Ember2Auto extends Ember2Bot {
      */
     private void unlatch() {
         // Lower the robot  ????
-        moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
+        //moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
 
         // Unlatch
         // Little forward
@@ -215,13 +215,14 @@ public class Ember2Auto extends Ember2Bot {
                 turnToAngle(0.7, 110);
                 break;
             case CENTER:
-                turnToAngle(0.7, 93);
+                turnToAngle(0.7, 88);
                 break;
             case RIGHT:
                 turnToAngle(0.7, 70);
                 break;
         }
-        mecanumDriveForMilliSec(0, 0, 0, 0.65, 2000);
+
+        mecanumDriveForMilliSec(0, 0, 0, 0.65, 2100);
 
         telemetry.update();
         return;
@@ -231,7 +232,7 @@ public class Ember2Auto extends Ember2Bot {
     private int findGoldMineral() {
         double startTime = runtime.milliseconds();
 
-        while (runtime.milliseconds() < startTime + (3 * 1000)) {
+        while (opModeIsActive() && runtime.milliseconds() < startTime + (3 * 1000)) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -278,7 +279,7 @@ public class Ember2Auto extends Ember2Bot {
     private int findGoldMineral2() {
         double startTime = runtime.milliseconds();
 
-        while (runtime.milliseconds() < startTime + (5 * 1000)) {
+        while (opModeIsActive() && runtime.milliseconds() < startTime + (7 * 1000)) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -313,49 +314,11 @@ public class Ember2Auto extends Ember2Bot {
 
     private void turnToViewMinerals() {
         // turn left and move forward
-        turnToAngle(0.8, 87);
-        mecanumDriveForMilliSec(0, 0, 0, -0.5, 500);
+        turnToAngle(0.7, 83);
+        mecanumDriveForMilliSec(0, 0, 0, -0.5, 505);
         telemetry.update();
 
         stopAllDrive();
-
-/*
-        int scan = 0;
-        while (opModeIsActive()) {
-            telemetry.clear();
-
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null) {
-                telemetry.addData("# Object Detected", updatedRecognitions.size());
-                pause(10000);
-                if (updatedRecognitions.size() == 3) {
-                    // Move until all three in view
-                    telemetry.update();
-                    break;
-                }
-            }
-
-            turnToAngle(0.6, scan + 85);
-            telemetry.update();
-
-            scan = ((scan + 5) % 30) - 15;
-        }
-*/
-    }
-
-    private boolean isMineralAhead(float heading) {
-        if (heading < 40 && heading > 20) {
-            return true;
-        }
-        if (heading < 10 && heading > -10) {
-            return true;
-        }
-        if (heading < -20 && heading > -40) {
-            return true;
-        }
-        return false;
     }
 
     /**
