@@ -118,8 +118,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                         int silverMineral2X = -1;
                         for (Recognition recognition : updatedRecognitions) {
                           if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                            goldMineralX = (int) recognition.getLeft();
-                              telemetry.addData("Gold height", recognition.getWidth());
+                            goldMineralX = (int) recognition.getTop();
                               telemetry.addData("Gold left", recognition.getTop());
                               telemetry.addData("Gold getImageHeight", recognition.getImageWidth());
                               telemetry.addData("Gold getImageWidth", recognition.getImageHeight());
@@ -128,9 +127,8 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                           } else {
                             silverMineral2X = (int) recognition.getLeft();
                           }
-                          telemetry.addData("height", recognition.getHeight());
-                          telemetry.addData("left", recognition.getLeft());
-                          telemetry.addData("right", recognition.getRight());
+                          telemetry.addData("left", recognition.getTop());
+                          telemetry.addData("right", recognition.getBottom());
                           telemetry.addData("getImageHeight", recognition.getImageHeight());
                           telemetry.addData("getImageWidth", recognition.getImageWidth());
                         }

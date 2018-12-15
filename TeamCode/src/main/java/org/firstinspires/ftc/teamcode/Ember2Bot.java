@@ -220,7 +220,7 @@ public abstract class Ember2Bot extends LinearOpMode {
 
             //Motor has power and is running during this loop
             telemetry.addData("accMotor", "pos: %d", AccMotor.getCurrentPosition());
-            telemetry.addData("accMotor", "tartger pos: %d", AccMotor.getTargetPosition());
+            telemetry.addData("accMotor", "targer pos: %d", AccMotor.getTargetPosition());
             telemetry.update();
         }
 
@@ -334,10 +334,18 @@ public abstract class Ember2Bot extends LinearOpMode {
         turnToAngle(power, orientation.firstAngle + degrees);
     }
 
+    /**
+     * Turns to given angle using gyro
+     * @param power
+     * @param targetHeading
+     */
     protected void turnToAngle(double power, float targetHeading) {
         float startHeading = imu.getAngularOrientation().firstAngle;
         float diff = targetHeading - startHeading;
+
+
         if (diff > 0) {
+            // positive power means turn left, negative means turn right
             power = -power;
         }
 

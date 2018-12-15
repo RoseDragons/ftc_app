@@ -55,8 +55,6 @@ public class Mecanum_Wheel_Program extends Ember2Bot
 
 
         double boxServoSpeed = gamepad2.left_stick_y;
-        //servo_3.setPower(boxServoSpeed);
-        //servo_5.setPower(boxServoSpeed);
 
         //Taking values from the gamepad
         mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);

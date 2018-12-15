@@ -42,29 +42,44 @@ public class Ember2Crater extends Ember2Auto {
     public void emberStart() {
         super.emberStart();
 
-        mecanumDriveForMilliSec(0, 0, 0, -0.8, 800);
+        ////////// Go drop Marker
+        // Move back from Gold mineral
+        mecanumDriveForMilliSec(0, 0, 0, -0.8, 780);
 
+        // Face the wall
         turnToAngle(0.7, -8);
 
+        // Go towards wall
         switch (goldPosition) {
             case LEFT:
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1640);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1575);
                 break;
             case CENTER:
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1675);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1655);
                 break;
             case RIGHT:
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1680);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1685);
                 break;
         }
 
+        // Go to Depot
         turnToAngle(0.7, 33);
-        mecanumDriveForMilliSec(0, 0, 0, -0.9, 2000);
+        mecanumDriveForMilliSec(0, 0, 0, -0.9, 1900);
 
         // Stop
         mecanumDriveForMilliSec(0, 0, 0, 0, 25);
 
         //Drop the Marker
         DragonDrop.setPosition(0.75);
+
+        // Stop
+        mecanumDriveForMilliSec(0, 0, 0, 0, 500);
+
+        // Come back to crater
+        turnToAngle(0.7, 45);
+        mecanumDriveForMilliSec(0, 0, 0, 0.95, 2800);
+
+        // Stop
+        mecanumDriveForMilliSec(0, 0, 0, 0, 25);
     }
 }

@@ -37,28 +37,46 @@ public class Ember2Depot extends Ember2Auto {
 
     /*
      * Code to run ONCE when the driver hits PLAY
+     * Add extra code when on Depot side after Gold is moved
      */
     @Override
     public void emberStart() {
         super.emberStart();
 
+        // Move back to not hit other minerals while turning
+        mecanumDriveForMilliSec(0, 0, 0, -0.8, 650);
+
         //Turn towards depot
         switch (goldPosition) {
-            case 1:
+            case LEFT:
+                telemetry.addData("Turn", "Left");
+                telemetry.update();
+                turnToAngle(0.8, -60);
+                // Go forward
+                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1200);
                 // Turn right
-                turnDegrees(0.8, -80);
-                // Go forward
-                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1900);
+                turnToAngle(0.8, -125);
+                // Into depot
+                mecanumDriveForMilliSec(0, 0, 0, -0.9, 900);
                 break;
-            case 2:
+            case CENTER:
+                telemetry.addData("Turn", "Center");
+                telemetry.update();
+                turnToAngle(0.8, -90);
                 // Go forward
-                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1400);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1650);
                 break;
-            case 3:
+            case RIGHT:
+                telemetry.addData("Turn", "Right");
+                telemetry.update();
                 // Turn right
-                turnDegrees(0.8, 50);
+                turnToAngle(0.8, -110);
                 // Go forward
-                mecanumDriveForMilliSec(0, 0, 0, -0.7, 1800);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1200);
+                // Turn left
+                turnToAngle(0.8, -60);
+                // Into depot
+                mecanumDriveForMilliSec(0, 0, 0, -0.9, 800);
                 break;
         }
 
@@ -67,6 +85,29 @@ public class Ember2Depot extends Ember2Auto {
         DragonDrop.setPosition(0.75);
 
         // Stop
-        mecanumDriveForMilliSec(0, 0, 0, 0, 50);
+        mecanumDriveForMilliSec(0, 0, 0, 0, 300);
+
+        // Clear depot
+        switch (goldPosition) {
+            case LEFT:
+                turnToAngle(0.8, -145);
+                mecanumDriveForMilliSec(0, 0, 0, 0.95, 800);
+                break;
+            case CENTER:
+                turnToAngle(0.8, -152);
+                mecanumDriveForMilliSec(0, 0, 0, 0.95, 825);
+                break;
+            case RIGHT:
+                turnToAngle(0.8, -125);
+                mecanumDriveForMilliSec(0, 0, 0, 0.95, 300);
+                break;
+        }
+
+        // Go to opponent crater
+        turnToAngle(0.7, -120);
+        mecanumDriveForMilliSec(0, 0, 0, 0.95, 2000);
+
+        // Stop
+        mecanumDriveForMilliSec(0, 0, 0, 0, 25);
     }
 }

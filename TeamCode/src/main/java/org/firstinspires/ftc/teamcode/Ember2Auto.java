@@ -206,19 +206,19 @@ public class Ember2Auto extends Ember2Bot {
     private void moveGoldMineral() {
         turnToViewMinerals();
 
-        int goldPosition = findGoldMineral();
+        goldPosition = findGoldMineral2();
         telemetry.update();
 
-        // Move Gold by move backwards
+        // Move Gold by moving backwards (phone side)
         switch(goldPosition){
             case LEFT:
-                turnToAngle(0.7, 110);
+                turnToAngle(0.7, 105);
                 break;
             case CENTER:
-                turnToAngle(0.7, 88);
+                turnToAngle(0.7, 87);
                 break;
             case RIGHT:
-                turnToAngle(0.7, 70);
+                turnToAngle(0.7, 63);
                 break;
         }
 
@@ -232,7 +232,7 @@ public class Ember2Auto extends Ember2Bot {
     private int findGoldMineral() {
         double startTime = runtime.milliseconds();
 
-        while (opModeIsActive() && runtime.milliseconds() < startTime + (3 * 1000)) {
+        while (opModeIsActive() && runtime.milliseconds() < startTime + (4 * 1000)) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -252,8 +252,6 @@ public class Ember2Auto extends Ember2Bot {
                         } else {
                             silverMineral2X = (int) recognition.getTop();
                         }
-                        telemetry.addData("height", updatedRecognitions.get(0).getWidth());
-                        telemetry.addData("getImageHeight", updatedRecognitions.get(0).getImageWidth());
                     }
                     if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
@@ -279,7 +277,7 @@ public class Ember2Auto extends Ember2Bot {
     private int findGoldMineral2() {
         double startTime = runtime.milliseconds();
 
-        while (opModeIsActive() && runtime.milliseconds() < startTime + (7 * 1000)) {
+        while (opModeIsActive() && runtime.milliseconds() < startTime + (3 * 1000)) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -289,12 +287,12 @@ public class Ember2Auto extends Ember2Bot {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
                 for (Recognition recognition : updatedRecognitions) {
                     if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        if (recognition.getTop() < 420) {
+                        if (recognition.getTop() < 350) {
                             telemetry.addData("Gold Mineral Position", "Left");
                             return LEFT;
                         }
 
-                        if (recognition.getTop() < 820) {
+                        if (recognition.getTop() < 700) {
                             telemetry.addData("Gold Mineral Position", "Center");
                             return CENTER;
                         }
@@ -312,9 +310,13 @@ public class Ember2Auto extends Ember2Bot {
         return LEFT;
     }
 
+    /**
+     * Turn robot after unlatching to face camera towards minerals
+     * Move under lander to view all three minerals in camera
+     */
     private void turnToViewMinerals() {
-        // turn left and move forward
-        turnToAngle(0.7, 83);
+        // turn left and move forward to go under lander
+        turnToAngle(0.75, 74);
         mecanumDriveForMilliSec(0, 0, 0, -0.5, 505);
         telemetry.update();
 
@@ -463,7 +465,7 @@ public class Ember2Auto extends Ember2Bot {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.3;
+        tfodParameters.minimumConfidence = 0.45;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
