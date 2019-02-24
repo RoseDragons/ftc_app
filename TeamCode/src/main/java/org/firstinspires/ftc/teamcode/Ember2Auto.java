@@ -191,7 +191,7 @@ public class Ember2Auto extends Ember2Bot {
      */
     private void unlatch() {
         // Lower the robot  ????
-        //moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
+        moveAccTicks(ACC_MOTOR_MAX_TICKS - 1100, 1.0);
 
         // Unlatch
         // Little forward

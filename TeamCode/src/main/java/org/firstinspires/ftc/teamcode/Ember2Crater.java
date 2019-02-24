@@ -52,13 +52,13 @@ public class Ember2Crater extends Ember2Auto {
         // Go towards wall
         switch (goldPosition) {
             case LEFT:
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1575);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1555);
                 break;
             case CENTER:
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1655);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1615);
                 break;
             case RIGHT:
-                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1685);
+                mecanumDriveForMilliSec(0, 0, 0, -0.8, 1645);
                 break;
         }
 
@@ -76,7 +76,7 @@ public class Ember2Crater extends Ember2Auto {
         mecanumDriveForMilliSec(0, 0, 0, 0, 500);
 
         // Come back to crater
-        turnToAngle(0.7, 45);
+        turnToAngle(0.7, 43);
         mecanumDriveForMilliSec(0, 0, 0, 0.95, 2800);
 
         // Stop
