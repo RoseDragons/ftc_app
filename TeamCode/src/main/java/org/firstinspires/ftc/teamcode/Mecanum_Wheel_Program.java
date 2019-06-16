@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Mecanum Wheel Drive", group="Opmode")
-public class Mecanum_Wheel_Program extends Ember2Bot
+public class Mecanum_Wheel_Program extends NemoBot
 {
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
@@ -47,17 +47,17 @@ public class Mecanum_Wheel_Program extends Ember2Bot
 
         //Moving acctuator with gamepad
         double AccPower = -gamepad2.right_stick_y;
-        if (inAccRange(ACC_MOTOR_MAX_TICKS, (AccPower > 0))) {
-            AccMotor.setPower(AccPower);
-        } else {
-            AccMotor.setPower(0);
-        }
+//        if (inAccRange(ACC_MOTOR_MAX_TICKS, (AccPower > 0))) {
+//            AccMotor.setPower(AccPower);
+//        } else {
+//            AccMotor.setPower(0);
+//        }
 
 
         double boxServoSpeed = gamepad2.left_stick_y;
 
         //Taking values from the gamepad
-        mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
+        mecanumDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x, gamepad1.right_stick_y);
 
         // Show the elapsed game time and wheel power & updating telemetry
         telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -66,7 +66,7 @@ public class Mecanum_Wheel_Program extends Ember2Bot
         telemetry.addData("gamepad", "2: left.x (%.2f), left.y (%.2f), right.x (%.2f), right.y (%.2f)",
                 gamepad2.left_stick_x, gamepad2.left_stick_y, gamepad2.right_stick_x, gamepad2.right_stick_y);
         telemetry.addData("Motors", "m0 (%.2f), m1 (%.2f), m2 (%.2f), m3 (%.2f)", v0, v1, v2, v2);
-        telemetry.addData("Acc", "pos: %d", AccMotor.getCurrentPosition());
+        //telemetry.addData("Acc", "pos: %d", AccMotor.getCurrentPosition());
         telemetry.update();
     }
 
