@@ -42,6 +42,10 @@ public abstract class NemoBot extends LinearOpMode {
     DcMotor Motor_2;
     DcMotor Motor_3;
 
+    DcMotor LeftIntake;
+    DcMotor RightIntake;
+
+
     //Velocity for each wheel
     double v0;
     double v1;
@@ -80,11 +84,17 @@ public abstract class NemoBot extends LinearOpMode {
         Motor_2 = hardwareMap.get(DcMotor.class, "Motor_2");
         Motor_3 = hardwareMap.get(DcMotor.class, "Motor_3");
 
+        LeftIntake = hardwareMap.get(DcMotor.class, "LeftIntake");
+        RightIntake = hardwareMap.get(DcMotor.class, "RightIntake");
+
         //Wheels stop immediately when power is set to 0.
         Motor_0.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor_1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor_2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor_3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        LeftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //Our robot doesn't have a defined front or back.
         Motor_0.setDirection(DcMotorSimple.Direction.REVERSE);

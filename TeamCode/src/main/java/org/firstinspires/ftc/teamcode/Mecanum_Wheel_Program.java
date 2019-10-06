@@ -54,10 +54,18 @@ public class Mecanum_Wheel_Program extends NemoBot
 //        }
 
 
-        double boxServoSpeed = gamepad2.left_stick_y;
+        double IntakeButton = gamepad1.left_trigger;
 
         //Taking values from the gamepad
         mecanumDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x, gamepad1.right_stick_y);
+
+        if (IntakeButton > 0) {
+            LeftIntake.setPower(1);
+            RightIntake.setPower(1);
+        } else{
+            LeftIntake.setPower(0);
+            RightIntake.setPower(0);
+        }
 
         // Show the elapsed game time and wheel power & updating telemetry
         telemetry.addData("Status", "Run Time: " + runtime.toString());
