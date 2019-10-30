@@ -31,7 +31,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Mecanum Wheel Drive", group="Opmode")
 public class Mecanum_Wheel_Program extends NemoBot
@@ -41,30 +40,40 @@ public class Mecanum_Wheel_Program extends NemoBot
      * Called from parent class: Ember2Bot
      */
     @Override
-    public void emberLoop() {
+    public void nemoLoop() {
         //Note: super is calling rom parent class
-        super.emberLoop();
-
-        //Moving acctuator with gamepad
-        double AccPower = -gamepad2.right_stick_y;
-//        if (inAccRange(ACC_MOTOR_MAX_TICKS, (AccPower > 0))) {
-//            AccMotor.setPower(AccPower);
-//        } else {
-//            AccMotor.setPower(0);
-//        }
+        super.nemoLoop();
 
 
-        double IntakeButton = gamepad1.left_trigger;
+        boolean intakeButton = gamepad2.right_bumper;
+        boolean reverseIntakeButton = gamepad2.left_bumper;
+        // Using 0.1 as threshold for button to avoid accidental trigger
+        boolean ejectButton = gamepad2.right_trigger > 0.1;
+        boolean reverseEjectButton = gamepad2.left_trigger > 0.1;
 
         //Taking values from the gamepad
-        mecanumDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x, gamepad1.right_stick_y);
+        mecanumDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
-        if (IntakeButton > 0) {
-            LeftIntake.setPower(1);
-            RightIntake.setPower(1);
-        } else{
-            LeftIntake.setPower(0);
-            RightIntake.setPower(0);
+        if (intakeButton) {
+            intake.setPower(1);
+            middle.setPower(1);
+        } else if (reverseIntakeButton) {
+            intake.setPower(-1);
+            middle.setPower(-1);
+        } else {
+            intake.setPower(0);
+            middle.setPower(0);
+        }
+
+        if(ejectButton) {
+            middle.setPower(1);
+            eject.setPower(1);
+        } else if (reverseEjectButton) {
+            middle.setPower(-1);
+            eject.setPower(-1);
+        } else {
+            middle.setPower(0);
+            eject.setPower(0);
         }
 
         // Show the elapsed game time and wheel power & updating telemetry
@@ -74,7 +83,6 @@ public class Mecanum_Wheel_Program extends NemoBot
         telemetry.addData("gamepad", "2: left.x (%.2f), left.y (%.2f), right.x (%.2f), right.y (%.2f)",
                 gamepad2.left_stick_x, gamepad2.left_stick_y, gamepad2.right_stick_x, gamepad2.right_stick_y);
         telemetry.addData("Motors", "m0 (%.2f), m1 (%.2f), m2 (%.2f), m3 (%.2f)", v0, v1, v2, v2);
-        //telemetry.addData("Acc", "pos: %d", AccMotor.getCurrentPosition());
         telemetry.update();
     }
 

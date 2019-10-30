@@ -4,8 +4,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -42,8 +40,10 @@ public abstract class NemoBot extends LinearOpMode {
     DcMotor Motor_2;
     DcMotor Motor_3;
 
-    DcMotor LeftIntake;
-    DcMotor RightIntake;
+    // DC Motors for manipulating the stones
+    DcMotor intake;
+    DcMotor middle;
+    DcMotor eject;
 
 
     //Velocity for each wheel
@@ -58,7 +58,7 @@ public abstract class NemoBot extends LinearOpMode {
     @Override
     public void runOpMode() {
         //Function for when init is pressed. (driver presses INIT)
-        emberInit();
+        nemoInit();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -67,7 +67,7 @@ public abstract class NemoBot extends LinearOpMode {
         emberStart();
         while (opModeIsActive()) {
             //When TeleOp is running
-            emberLoop();
+            nemoLoop();
         }
         //When stop is pressed
         emberStop();
@@ -76,7 +76,7 @@ public abstract class NemoBot extends LinearOpMode {
     /*
      * Code to run ONCE when the driver hits INIT
      */
-    public void emberInit() {
+    public void nemoInit() {
         // Setup a variable for each drive wheel to save power level for telemetry
         telemetry.addData("Status", "Running: " + runtime.toString());
         Motor_0 = hardwareMap.get(DcMotor.class, "Motor_0");
@@ -84,8 +84,9 @@ public abstract class NemoBot extends LinearOpMode {
         Motor_2 = hardwareMap.get(DcMotor.class, "Motor_2");
         Motor_3 = hardwareMap.get(DcMotor.class, "Motor_3");
 
-        LeftIntake = hardwareMap.get(DcMotor.class, "LeftIntake");
-        RightIntake = hardwareMap.get(DcMotor.class, "RightIntake");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        middle = hardwareMap.get(DcMotor.class, "middle");
+        eject = hardwareMap.get(DcMotor.class, "eject");
 
         //Wheels stop immediately when power is set to 0.
         Motor_0.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -93,14 +94,11 @@ public abstract class NemoBot extends LinearOpMode {
         Motor_2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Motor_3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        LeftIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        RightIntake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        middle.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        eject.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //Our robot doesn't have a defined front or back.
-        Motor_0.setDirection(DcMotorSimple.Direction.REVERSE);
-        Motor_1.setDirection(DcMotorSimple.Direction.REVERSE);
-        Motor_2.setDirection(DcMotorSimple.Direction.REVERSE);
-        Motor_3.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -139,7 +137,7 @@ public abstract class NemoBot extends LinearOpMode {
      * This method will be called repeatedly in a loop while this op mode is running
      * See implementations in Ember2Auto and Mecanum_Wheel_Program
      */
-    public void emberLoop() {};
+    public void nemoLoop() {};
 
     /*
      * This method will be called when this op mode is first disabled
