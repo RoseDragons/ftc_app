@@ -51,6 +51,9 @@ public class Mecanum_Wheel_Program extends NemoBot
         boolean ejectButton = gamepad2.right_trigger > 0.1;
         boolean reverseEjectButton = gamepad2.left_trigger > 0.1;
 
+        boolean servoUp = gamepad2.dpad_up;
+        boolean servoDown = gamepad2.dpad_down;
+
         //Taking values from the gamepad
         mecanumDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_y);
 
@@ -74,6 +77,14 @@ public class Mecanum_Wheel_Program extends NemoBot
         } else {
             middle.setPower(0);
             eject.setPower(0);
+        }
+
+        if(servoUp) {
+            grabLeft.setPosition(0);
+            grabRight.setPosition(0);
+        } else if (servoDown) {
+            grabLeft.setPosition(0.75);
+            grabRight.setPosition(0.75);
         }
 
         // Show the elapsed game time and wheel power & updating telemetry
