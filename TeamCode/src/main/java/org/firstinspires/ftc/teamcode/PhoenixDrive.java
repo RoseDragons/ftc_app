@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "DriveOne (Blocks to Java)", group = "")
-public class DriveOne extends LinearOpMode {
+@TeleOp(name = "PhoenixDrive", group = "")
+public class PhoenixDrive extends LinearOpMode {
 
     private DcMotor right_drive;
     private DcMotor left_drive;
