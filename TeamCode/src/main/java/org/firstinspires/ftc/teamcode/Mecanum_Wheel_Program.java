@@ -30,9 +30,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="Mecanum Wheel Drive", group="Opmode")
+@Disabled
 public class Mecanum_Wheel_Program extends NemoBot
 {
     /*

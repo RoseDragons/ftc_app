@@ -31,8 +31,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Autonomous(name="Ember2Depot", group="Opmode")
+@Disabled
 public class Ember2Depot extends Ember2Auto {
 
     /*

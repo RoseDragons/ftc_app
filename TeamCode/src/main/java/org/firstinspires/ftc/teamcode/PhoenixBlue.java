@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.Locale;
 
-@TeleOp(name = "PhoenixBlue", group = "")
+@Autonomous(name = "PhoenixBlue", group = "Opmode")
 public class PhoenixBlue extends LinearOpMode {
 
     protected ElapsedTime runtime = new ElapsedTime();
@@ -53,10 +54,12 @@ public class PhoenixBlue extends LinearOpMode {
 
         initImu();
 
-        double intakePosition = (gamepad2.left_stick_y + 1) / 2;
+        double intakePosition = 1;
 
         // Reverse one of the drive motors.
-        right_drive.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Arm motor is also installed reverse
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -66,16 +69,34 @@ public class PhoenixBlue extends LinearOpMode {
             grab_left.setPosition(0.5);
             grab_right.setPosition(0.5);
 
-            //!!! Add autonomous code here !!!
-
-            // Pause (in milliseconds) 
-            pause(1000);
+            ////////////!!! Add autonomous code here !!!
+            // pause(in milliseconds)
 
             // Go straight
-            runToPositions(280,280, 0.5);
+            runToPositions(1250,1250, 0.5);
+            //pause(60000);
 
             // turn (Positive values = turn left     Negative values = turn right)
-            turnToAngle(0.3, 90);
+            //turnToAngle(0.3, -90);
+
+            // grab platform
+            grab_right.setPosition(1.0);
+            grab_left.setPosition(1.0);
+
+            pause(1000);
+
+            //Back up (to go backward, have the positions negative)
+            runToPositions(-800, -800, 0.5);
+
+            turnToAngle(0.8,90);
+
+            //Release Foundation
+            grab_right.setPosition(0.0);
+            grab_left.setPosition(0.0);
+
+            //Back up to park under alliance bridge
+            runToPositions(-900, -1000, 0.5);
+
 
             telemetry.addData("Left Pow", left_drive.getPower());
             telemetry.addData("Right Pow", right_drive.getPower());
@@ -133,17 +154,17 @@ public class PhoenixBlue extends LinearOpMode {
         left_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right_drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        double turningSidePower = pow;
-        if (leftPosition < 0) {
-            turningSidePower = -turningSidePower;
+        if (leftPosition > 0) {
+            left_drive.setPower(pow);
+        } else {
+            left_drive.setPower(-pow);
         }
-        left_drive.setPower(turningSidePower);
 
-        double oppositeSidePower = pow;
-        if (rightPosition < 0) {
-            oppositeSidePower = -oppositeSidePower;
+        if (rightPosition > 0) {
+            right_drive.setPower(pow);
+        } else {
+            right_drive.setPower(-pow);
         }
-        right_drive.setPower(oppositeSidePower);
 
         while (opModeIsActive() && (isMotorBusy(left_drive) || isMotorBusy(right_drive))) {
             telemetry.addData("leftMotor", "%d, target: %d, power: %.2f", left_drive.getCurrentPosition(), left_drive.getTargetPosition(), left_drive.getPower());
@@ -164,7 +185,7 @@ public class PhoenixBlue extends LinearOpMode {
         float startHeading = imu.getAngularOrientation().firstAngle;
         float diff = targetHeading - startHeading;
 
-        if (diff > 0) {
+        if (diff < 0) {
             // positive power means turn left, negative means turn right
             power = -power;
         }

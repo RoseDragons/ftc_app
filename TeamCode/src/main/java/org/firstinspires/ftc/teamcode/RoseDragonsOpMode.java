@@ -13,7 +13,7 @@ import java.util.Locale;
  * Created by Rose Dragons on 9/24/2017.
  */
 @TeleOp(name="Rose Dragons OpMode", group="Linear Opmode")
-
+@Disabled
 public class RoseDragonsOpMode extends EmberBot {
 
     private double driveNormalFactor = 0.85;

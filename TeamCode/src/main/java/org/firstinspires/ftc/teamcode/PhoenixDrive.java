@@ -34,10 +34,10 @@ public class PhoenixDrive extends LinearOpMode {
         intake = hardwareMap.servo.get("intake");
 
         // Reverse one of the drive motors.
-        // You will have to determine which motor to reverse for your robot.
-        // In this example, the right motor was reversed so that positive
-        // applied power makes it move the robot in the forward direction.
-        right_drive.setDirection(DcMotorSimple.Direction.REVERSE);
+        left_drive.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Arm motor is also installed reverse
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
+
         waitForStart();
         if (opModeIsActive()) {
             // Put run blocks here.
@@ -46,10 +46,10 @@ public class PhoenixDrive extends LinearOpMode {
                 // The Y axis of a joystick ranges from -1 in its topmost position
                 // to +1 in its bottommost position. We negate this value so that
                 // the topmost position corresponds to maximum forward power.
-                left_drive.setPower(gamepad1.right_stick_y - gamepad1.right_stick_x);
-                right_drive.setPower(gamepad1.right_stick_y + gamepad1.right_stick_x);
+                left_drive.setPower(-gamepad1.right_stick_y + gamepad1.right_stick_x);
+                right_drive.setPower(-gamepad1.right_stick_y - gamepad1.right_stick_x);
 
-                double armPower = gamepad2.right_stick_y;
+                double armPower = -gamepad2.right_stick_y;
                 if (!gamepad2.left_bumper) {
                     armPower /= 2;
                 }
