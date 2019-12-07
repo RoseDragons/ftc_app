@@ -66,8 +66,8 @@ public class PhoenixDrive extends LinearOpMode {
                     grab_right.setPosition(0.5);
                 }
 
-                telemetry.addData("Left Pow", left_drive.getPower());
-                telemetry.addData("Right Pow", right_drive.getPower());
+                telemetry.addData("leftMotor", "%d, power: %.2f", left_drive.getCurrentPosition(), left_drive.getPower());
+                telemetry.addData("rightMotor", "%d, power: %.2f", right_drive.getCurrentPosition(), right_drive.getPower());
                 telemetry.addData("Arm Pow", arm.getPower());
                 telemetry.addData("Intake Pos", intakePosition);
                 telemetry.addData("Grabber Pos", grab_left.getPosition());

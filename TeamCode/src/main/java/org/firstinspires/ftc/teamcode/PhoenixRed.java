@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.Locale;
 
-@Autonomous(name = "PhoenixBlue", group = "Opmode")
-public class PhoenixBlue extends LinearOpMode {
+@Autonomous(name = "PhoenixRed", group = "Opmode")
+public class PhoenixRed extends LinearOpMode {
 
     protected ElapsedTime runtime = new ElapsedTime();
 
@@ -83,12 +82,10 @@ public class PhoenixBlue extends LinearOpMode {
             pause(1000);
 
             //Back up (to go backward, have the positions negative)
-            runToPositions(-400, 0.6, 100,0.6);
+            runToPositions(100, 0.6, -400,0.6);
             runStraight(-500, 0.8);
-            //runToPositions(0, -800, 0.4);
-            //turnToAngle(0.8, 45);
 
-            turnToAngle(0.8,90);
+            turnToAngle(0.8,-90);
 
             //Release Foundation
             grab_right.setPosition(0.0);

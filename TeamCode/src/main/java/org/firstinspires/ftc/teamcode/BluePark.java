@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.Locale;
 
-@Autonomous(name = "PhoenixBlue", group = "Opmode")
-public class PhoenixBlue extends LinearOpMode {
+@Autonomous(name = "BluePark", group = "Opmode")
+public class BluePark extends LinearOpMode {
 
     protected ElapsedTime runtime = new ElapsedTime();
 
@@ -73,29 +72,18 @@ public class PhoenixBlue extends LinearOpMode {
             // pause(in milliseconds)
 
             // Go straight
-            runStraight(1250, 0.5);
+            runStraight(900, 0.5);
             //pause(60000);
 
-            // grab platform
-            grab_right.setPosition(1);
-            grab_left.setPosition(1);
 
             pause(1000);
 
-            //Back up (to go backward, have the positions negative)
-            runToPositions(-400, 0.6, 100,0.6);
-            runStraight(-500, 0.8);
-            //runToPositions(0, -800, 0.4);
-            //turnToAngle(0.8, 45);
+            //Turn left 90 degrees
+            turnToAngle(0.5,-90);
 
-            turnToAngle(0.8,90);
 
-            //Release Foundation
-            grab_right.setPosition(0.0);
-            grab_left.setPosition(0.0);
-
-            //Back up to park under alliance bridge
-            runStraight(-1000,  0.5);
+            //Park under alliance bridge
+            runStraight(1400,  0.5);
 
             telemetry.addData("Left Pow", left_drive.getPower());
             telemetry.addData("Right Pow", right_drive.getPower());
