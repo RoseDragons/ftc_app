@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.Locale;
 
-@Autonomous(name = "PhoenixRed", group = "Opmode")
-public class PhoenixRed extends LinearOpMode {
+@Autonomous(name = "BluePark-10", group = "Opmode")
+public class BluePark10 extends LinearOpMode {
 
     protected ElapsedTime runtime = new ElapsedTime();
 
@@ -70,37 +70,16 @@ public class PhoenixRed extends LinearOpMode {
 
             ////////////!!! Add autonomous code here !!!
             // pause(in milliseconds)
-
-            // Go straight
-            runStraight(1100, 0.5);
-            runStraight(250, 0.3);
-            //pause(60000);
-
-            // grab platform
-            grab_right.setPosition(1);
-            grab_left.setPosition(1);
+            runStraight(200,0.6);
 
             pause(1000);
 
-            //Back up (to go backward, have the positions negative)
-            runToPositions(100, 0.6, -400,0.6);
-            runStraight(-500, 0.8);
+            //Turn left 90 degrees
+            turnToAngle(0.5,-90);
 
-            turnToAngle(0.8,-90);
 
-            //Release Foundation
-            grab_right.setPosition(0.0);
-            grab_left.setPosition(0.0);
-
-            pause(500);
-
-            runStraight(350,0.6);
-
-            intake.setPosition(0);
-            arm.setPower(0);
-
-            //Back up to park under alliance bridge
-            runStraight(-1250,  0.5);
+            //Park under alliance bridge
+            runStraight(1400,  0.5);
 
             telemetry.addData("Left Pow", left_drive.getPower());
             telemetry.addData("Right Pow", right_drive.getPower());

@@ -73,7 +73,8 @@ public class PhoenixBlue extends LinearOpMode {
             // pause(in milliseconds)
 
             // Go straight
-            runStraight(1250, 0.5);
+            runStraight(1150, 0.5);
+            runStraight(250, 0.4);
             //pause(60000);
 
             // grab platform
@@ -85,17 +86,20 @@ public class PhoenixBlue extends LinearOpMode {
             //Back up (to go backward, have the positions negative)
             runToPositions(-400, 0.6, 100,0.6);
             runStraight(-500, 0.8);
-            //runToPositions(0, -800, 0.4);
-            //turnToAngle(0.8, 45);
 
-            turnToAngle(0.8,90);
+            turnToAngle(0.8,80);
 
             //Release Foundation
             grab_right.setPosition(0.0);
             grab_left.setPosition(0.0);
 
+            runStraight(500,0.6);
+
+            intake.setPosition(0);
+            arm.setPower(0);
+
             //Back up to park under alliance bridge
-            runStraight(-1000,  0.5);
+            runStraight(-1250,  0.5);
 
             telemetry.addData("Left Pow", left_drive.getPower());
             telemetry.addData("Right Pow", right_drive.getPower());

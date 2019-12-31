@@ -73,8 +73,6 @@ public class RedPark extends LinearOpMode {
 
             // Go straight
             runStraight(900, 0.5);
-            //pause(60000);
-
 
             pause(1000);
 
